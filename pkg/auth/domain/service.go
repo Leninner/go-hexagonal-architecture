@@ -92,6 +92,6 @@ func (s *Service) HasCorrectPassword(databasePwd string, incomingPwd []byte) boo
 }
 
 // NewService creates a new service struct
-func NewService(repository AuthRepository) *Service {
-	return &Service{repository: repository}
+func NewService(repository AuthRepository, jwtService JwtService) *Service {
+	return &Service{repository: repository, jwtService: jwtService}
 }
