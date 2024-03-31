@@ -1,0 +1,16 @@
+services:
+  db:
+    container_name: feature-flags-db
+    image: postgres:16.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-tasks}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-tasks}
+      POSTGRES_DB: ${DATABASE_NAME:-tasks}
+    ports:
+      - 5432:5432
+    volumes:
+      - feature-flags-db-data:/var/lib/postgresql/data
+
+volumes:
+  feature-flags-db-data:
