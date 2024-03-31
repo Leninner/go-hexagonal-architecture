@@ -19,7 +19,7 @@ type Store struct {
 }
 
 func New(db *gorm.DB) *Store {
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.User{}, &models.Role{}, &models.Module{}, &models.Operation{})
 
 	return &Store{
 		db: db,

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	coreErrors "github.com/leninner/go-feature-flags/pkg/core/errors"
 
 	authRoutes "github.com/leninner/go-feature-flags/pkg/auth/application"

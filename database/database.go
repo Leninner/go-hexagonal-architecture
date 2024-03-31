@@ -47,7 +47,7 @@ func GetConnection() {
 	var err error
 
 	DB, err = gorm.Open(postgres.Open(databaseString), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Silent),
 	})
 
 	if err != nil {
