@@ -9,6 +9,7 @@ import (
 	"github.com/leninner/go-feature-flags/database"
 	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/dto"
 	user_models "github.com/leninner/go-feature-flags/pkg/users/data/models"
+	users "github.com/leninner/go-feature-flags/pkg/users/domain"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,7 +24,7 @@ type AuthService interface {
 }
 
 type Service struct {
-	repository AuthRepository
+	repository users.UserRepository
 	jwtService JwtService
 }
 
@@ -91,7 +92,6 @@ func (s *Service) HasCorrectPassword(databasePwd string, incomingPwd []byte) boo
 	return true
 }
 
-// NewService creates a new service struct
-func NewService(repository AuthRepository, jwtService JwtService) *Service {
+func NewService(repository users.UserRepository, jwtService JwtService) *Service {
 	return &Service{repository: repository, jwtService: jwtService}
 }
