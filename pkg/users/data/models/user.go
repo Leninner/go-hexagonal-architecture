@@ -10,7 +10,7 @@ import (
 type User struct {
 	ID       int    `json:"id" gorm:"primaryKey"`
 	Username string `json:"username"`
-	Password string `json:"password" gorm:"->:false"`
+	Password string `json:"password"`
 	Email    string `json:"email" gorm:"unique"`
 
 	Role   Role `json:"role" gorm:"foreignKey:RoleID"`

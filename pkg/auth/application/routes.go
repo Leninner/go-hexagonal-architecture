@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	domain "github.com/leninner/go-feature-flags/pkg/auth/domain"
 	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/dto"
+	"github.com/leninner/go-feature-flags/pkg/core"
 )
 
 func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
@@ -25,7 +26,7 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 				return
 			}
 
-			c.JSON(http.StatusOK, results)
+			c.JSON(http.StatusOK, core.NewResponseMessage("User created", results))
 		})
 
 		group.POST("/login", func(c *gin.Context) {
@@ -42,7 +43,7 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 				return
 			}
 
-			c.JSON(http.StatusOK, results)
+			c.SetCookie("access_token", results, 3600, "/", "localhost", false, true)
 		})
 
 	}
