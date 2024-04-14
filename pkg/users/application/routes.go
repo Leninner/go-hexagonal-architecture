@@ -13,7 +13,6 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.UserService) {
 		group.GET("/:id", func(c *gin.Context) {
 			id := c.Query("id")
 			results, err := service.GetUser(id)
-
 			if err != nil {
 				c.Error(err)
 				return
@@ -21,7 +20,6 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.UserService) {
 
 			c.JSON(http.StatusOK, results)
 		})
-
 	}
 
 	return userRoutesFactory

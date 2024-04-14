@@ -1,17 +1,16 @@
-package users
+package auth
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/application/dto"
 	domain "github.com/leninner/go-feature-flags/pkg/auth/domain"
-	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/dto"
 	"github.com/leninner/go-feature-flags/pkg/core"
 )
 
 func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 	userRoutesFactory := func(service domain.AuthService) {
-
 		group.POST("/signup", func(c *gin.Context) {
 			var signupDTO auth_dto.SignUpDTO
 			if err := c.ShouldBindJSON(&signupDTO); err != nil {
@@ -20,7 +19,6 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 			}
 
 			results, err := service.SignUp(signupDTO)
-
 			if err != nil {
 				c.Error(err)
 				return
@@ -37,7 +35,6 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 			}
 
 			results, err := service.Login(loginDTO)
-
 			if err != nil {
 				c.Error(err)
 				return
@@ -45,7 +42,6 @@ func NewRoutesFactory(group *gin.RouterGroup) func(service domain.AuthService) {
 
 			c.SetCookie("access_token", results, 3600, "/", "localhost", false, true)
 		})
-
 	}
 
 	return userRoutesFactory

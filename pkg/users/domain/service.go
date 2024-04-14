@@ -24,7 +24,6 @@ func NewService(repository UserRepository) *Service {
 
 func (s *Service) GetUser(id string) (*entities.User, error) {
 	integerID, err := strconv.Atoi(id)
-
 	if err != nil {
 		return nil, err
 	}

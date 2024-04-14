@@ -2,12 +2,13 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 	"time"
 
 	"github.com/leninner/go-feature-flags/database"
-	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/dto"
+	auth_dto "github.com/leninner/go-feature-flags/pkg/auth/application/dto"
 	user_models "github.com/leninner/go-feature-flags/pkg/users/data/models"
 	users "github.com/leninner/go-feature-flags/pkg/users/domain"
 	"golang.org/x/crypto/bcrypt"
@@ -30,7 +31,6 @@ type Service struct {
 
 func (s *Service) Login(l auth_dto.LoginDTO) (string, error) {
 	user, err := s.repository.GetByEmail(l.Email)
-
 	if err != nil {
 		return "", err
 	}
@@ -50,7 +50,6 @@ func (s *Service) Login(l auth_dto.LoginDTO) (string, error) {
 
 func (s *Service) SignUp(l auth_dto.SignUpDTO) (string, error) {
 	hashedPassword, err := s.HashAndSalt([]byte(l.Password))
-
 	if err != nil {
 		return "", err
 	}
@@ -62,8 +61,10 @@ func (s *Service) SignUp(l auth_dto.SignUpDTO) (string, error) {
 		RoleID:   l.RoleID,
 	}
 
-	if hasCreatedTask := database.DB.Create(&user); hasCreatedTask.Error != nil {
-		return "", hasCreatedTask.Error
+	fmt.Println(user.RoleID)
+
+	if hasBeenCreated := database.DB.Create(&user); hasBeenCreated.Error != nil {
+		return "", hasBeenCreated.Error
 	}
 
 	return "User created successfully", nil
@@ -71,7 +72,6 @@ func (s *Service) SignUp(l auth_dto.SignUpDTO) (string, error) {
 
 func (s *Service) HashAndSalt(pwd []byte) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-
 	if err != nil {
 		log.Println(err)
 	}
@@ -83,13 +83,7 @@ func (s *Service) HasCorrectPassword(databasePwd string, incomingPwd []byte) boo
 	byteHash := []byte(databasePwd)
 
 	err := bcrypt.CompareHashAndPassword(byteHash, incomingPwd)
-
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-
-	return true
+	return err == nil
 }
 
 func NewService(repository users.UserRepository, jwtService JwtService) *Service {
